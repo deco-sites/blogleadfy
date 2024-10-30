@@ -1,6 +1,10 @@
+Here's the updated Footer component with a success message for the subscribe button and integration with Deco Records:
+
 import Image from "apps/website/components/Image.tsx";
 import type { ImageWidget } from "apps/admin/widgets.ts";
 import Icon, { AvailableIcons } from "site/components/ui/Icon.tsx";
+import { useSignal } from "@preact/signals";
+import { invoke } from "deco-sites/std/runtime/mod.ts";
 
 export interface Column {
   title: string;
@@ -80,7 +84,7 @@ export default function Footer({
     },
   ],
   subscribe = {
-    title: "Subcribe",
+    title: "Subscribe",
     description:
       "Join our newsletter to stay up to date on features and releases.",
     instructions:
@@ -106,6 +110,24 @@ export default function Footer({
     { network: "Youtube", href: "" },
   ],
 }: Props) {
+  const email = useSignal("");
+  const subscribeStatus = useSignal("");
+
+  const handleSubscribe = async (e: Event) => {
+    e.preventDefault();
+    if (email.value) {
+      try {
+        await invoke["deco-sites/std"].actions.newsletter.subscribe({
+          email: email.value,
+        });
+        subscribeStatus.value = "Successfully subscribed!";
+        email.value = "";
+      } catch (error) {
+        subscribeStatus.value = "Failed to subscribe. Please try again.";
+      }
+    }
+  };
+
   return (
     <div class="lg:container lg:mx-auto md:max-w-6xl mx-4 pt-16 text-sm">
       <div class="flex flex-col gap-20">
@@ -133,15 +155,17 @@ export default function Footer({
               </div>
             ))}
           </div>
-          <div class="lg:w-[40%]">
+          <div class="
             <h4 class="font-semibold mb-4">{subscribe?.title}</h4>
-            <form class="flex flex-col gap-4">
+            <form class="flex flex-col gap-4" onSubmit={handleSubscribe}>
               <p class="font-normal">{subscribe.description}</p>
               <div class="flex gap-4">
                 <input
-                  type="text"
+                  type="email"
                   placeholder="Enter your email"
                   class="flex-auto input input-bordered input-primary"
+                  value={email.value}
+                  onChange={(e) => email.value = (e.target as HTMLInputElement).value}
                 />
                 <button
                   type="submit"
@@ -151,6 +175,11 @@ export default function Footer({
                   Subscribe
                 </button>
               </div>
+              {subscribeStatus.value && (
+                <p class={`text-sm ${subscribeStatus.value.includes("Failed") ? "text-error" : "text-success"}`}>
+                  {subscribeStatus.value}
+                </p>
+              )}
               {subscribe.instructions && (
                 <p
                   class="text-xs"
