@@ -2,10 +2,10 @@
   "name": "collections/blog/authors/07ae63fcc4c0",
   "__resolveType": "blog/loaders/Author.ts",
   "author": {
-    "name": "Name of the Author",
-    "email": "author@deco.cx",
-    "jobTitle": "Author",
-    "company": "deco.cx",
-    "avatar": "https://ozksgdmyrqcxcwhnbepg.supabase.co/storage/v1/object/public/assets/1527/7286de42-e9c5-4fcb-ae8b-b992eea4b78e"
+    "name": "Yuri Gitahy",
+    "email": "yuri@leadfy.me",
+    "jobTitle": "CEO",
+    "company": "Leadfy",
+    "avatar": "https://deco-sites-assets.s3.sa-east-1.amazonaws.com/blogleadfy/035df973-0b64-495d-a195-94c53221950a/Captura-de-tela-2024-10-01-172456.png"
   }
 }
